@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from "react";
 import {
     StyleSheet,
     Text,
@@ -7,13 +7,37 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Image,
+    Alert,
 } from 'react-native';
 import { COLORS, ROUTES } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 
+const users = [
+    {
+        username: 'admin1',
+        password: '123456'
+    },
+    {
+        username: 'admin2',
+        password: '123123'
+    }
+];
+
 const Login = (props) => {
     // const { navigation } = props;
     const navigation = useNavigation();
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = () => {
+        if(userName === "admin" && password === "admin123"){
+            Alert.alert(`Thank you ${userName}`)
+            navigation.navigate(ROUTES.HOME)
+        }else{
+            Alert.alert(`Username and Password is not connect`)
+        }
+    }
+
     return (
         <SafeAreaView style={styles.main}>
             <View style={styles.container}>
@@ -25,16 +49,33 @@ const Login = (props) => {
                             marginRight: 7,
                             borderRadius: 50
                         }} />
+                        
                         <Text style={styles.brandName}>Technology Store</Text>
                     </View>
 
                     <Text style={styles.loginContinueTxt}>Login in to continue</Text>
-                    <TextInput style={styles.input} placeholder="Email" />
-                    <TextInput secureTextEntry={true} style={styles.input} placeholder="Password" />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        type="text"
+                        name="username"
+                        value={userName}
+                        onChangeText={(actualData) => setUserName(actualData)}
+                    />
+                    <TextInput
+                        secureTextEntry={true}
+                        style={styles.input}
+                        placeholder="Password"
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChangeText={(actualData) => setPassword(actualData)}
+                    />
 
                     <View style={styles.loginBtnWrapper}>
                         <TouchableOpacity
-                            onPress={() => navigation.navigate(ROUTES.HOME)}
+                            onPress={() => handleSubmit()}
                             activeOpacity={0.7} style={styles.loginBtn}>
                             <Text style={styles.loginText}>Log In</Text>
                         </TouchableOpacity>
